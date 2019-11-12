@@ -16,7 +16,9 @@ void init_plateau(char T[LONGUEUR][LARGEUR]){
 	}
 }
 
-void init_reumu(vector<reumu> R,char T[LONGUEUR][LARGEUR]){
+void init(vector<reumu> & R,char T[LONGUEUR][LARGEUR],mobile & J){
+
+	T[J.getX()][J.getY()] = 'J';
 	for(int i = 0; i<LONGUEUR; i++){
 		R.push_back(reumu(i,LARGEUR-1));
 		R.push_back(reumu(i,0));
@@ -41,24 +43,36 @@ void draw(char T[LONGUEUR][LARGEUR]){
 	}
 }
 
-void update_oueurj(mobile *J,char T[LONGUEUR][LARGEUR]){
-	T[J->getX()][J->getY()] = 'J';
-}
-
-void move(mobile *J, char *c,char T[LONGUEUR][LARGEUR]){
-	if(*c=='q'){
-		J->gauche(T);
-		cout<<'g'<<endl;
-	}else if(*c=='d'){
-		J->droite(T);
-		cout<<'d'<<endl;
-	}else if(*c=='z'){
-		J->haut(T);
-		cout<<'h'<<endl;
-	}else if(*c=='s'){
-		J->bas(T);
-		cout<<'b'<<endl;
+void move(mobile & J, char & c,char T[LONGUEUR][LARGEUR]){
+	switch(c){
+		case 'q' :
+			J.gauche(T);
+			break;
+		case 'd' :
+			J.droite(T);
+			break;
+		case 'z':
+			J.haut(T);
+			break;
+		case 's':
+			J.bas(T);
+			break;
+		case 'a':
+			J.nord_ouest(T);
+			break;
+		case 'e':
+			J.nord_est(T);
+			break;
+		case 'w':
+			J.sud_ouest(T);
+			break;
+		case 'c':
+			J.sud_est(T);
+			break;
+		default:
+			break;
 	}
+	
 }
 
 int main(){
@@ -66,14 +80,12 @@ int main(){
 	init_plateau(T);
 	vector<reumu> R;
 	mobile J(5,5);
-	init_reumu(R,T);
-	update_oueurj(&J,T);
+	init(R,T,J);
 	draw(T);
 	while(1){
 		char c;
 		cin>>c;
-		move(&J,&c,T);
-		update_oueurj(&J,T);
+		move(J,c,T);
 		draw(T);
 	}
 	return 0;
