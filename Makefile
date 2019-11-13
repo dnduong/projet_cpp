@@ -1,5 +1,9 @@
 CPP=g++ --std=c++11 -Wall
-all : main
+all : main creator
+creator : creator.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o
+	$(CPP) -o creator creator.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o
+creator.o : creator.cpp
+	$(CPP) -c creator.cpp
 main : main.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o
 	$(CPP) -o main main.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o
 main.o : main.cpp

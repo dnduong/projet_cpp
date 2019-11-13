@@ -5,16 +5,8 @@
 #include "geurchar.hpp"
 #include "mobile.hpp"
 #include <vector>
-
+#include "commun.hpp"
 using namespace std;
-
-void init_plateau(char T[LONGUEUR][LARGEUR]){
-	for (int i = 0; i< LONGUEUR; i++){
-		for (int j = 0; j< LARGEUR; j++){
-			T[i][j]=(char)0;
-		}
-	}
-}
 
 void init(vector<reumu> & R,char T[LONGUEUR][LARGEUR],mobile & J){
 
@@ -31,15 +23,6 @@ void init(vector<reumu> & R,char T[LONGUEUR][LARGEUR],mobile & J){
 		int x = R.at(i).getX();
 		int y = R.at(i).getY();
 		if (T[x][y] == char(0)) { T[x][y] = 'X';}
-	}
-}
-
-void draw(char T[LONGUEUR][LARGEUR]){
-	for (int i = 0; i< LONGUEUR; i++){
-		for (int j = 0; j< LARGEUR; j++){
-			cout<<T[i][j];
-		}
-		cout<<'\n';
 	}
 }
 

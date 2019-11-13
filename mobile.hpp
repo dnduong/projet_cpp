@@ -8,6 +8,8 @@ class mobile: public element{
 private:
 	void move(char [LONGUEUR][LARGEUR],int,int);
 public:
+	int getLONGUEUR();
+	int getLARGEUR();
 	void gauche(char [LONGUEUR][LARGEUR]);
 	void droite(char [LONGUEUR][LARGEUR]);
 	void haut(char [LONGUEUR][LARGEUR]);
