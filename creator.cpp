@@ -7,6 +7,7 @@
 #include "commun.hpp"
 #include <vector>
 #include <string>
+#include <fstream>
 using namespace std;
 
 void init_reumu(char T[LONGUEUR][LARGEUR]){
@@ -60,6 +61,55 @@ void init(char T[LONGUEUR][LARGEUR], char ch){
 	}
 }
 
+void tableToVector(char T[LONGUEUR][LARGEUR], vector<reumu> & R, vector<diams> & D, vector<geurchar> & G, vector<teupor> & P){
+	for(int i = 0; i<LONGUEUR; i++){
+		for(int j = 0; j<LARGEUR; j++){
+			if(T[i][j] == 'X'){
+				R.push_back(reumu(j,i));
+			}else if(T[i][j] == '$'){
+				D.push_back(diams(j,i));
+			}else if(T[i][j] == '*'){
+				G.push_back(geurchar(j,i));
+			}else if(T[i][j] == '-'){
+				P.push_back(teupor(j,i));
+			}
+		}
+	}
+}
+
+void creationFichier(vector<reumu> & R, vector<diams> & D, vector<geurchar> & G, vector<teupor> & P){
+	string fn;
+	cout<<"Entrer le nom du fichier"<<endl;
+	cin>>fn;
+	fstream file;
+	file.open(fn,ios::out);
+	if(!file){
+		cout<<"Création échouée"<<endl;
+		return;
+	}
+	file<<'D';
+	for(int i = 0; (unsigned)i< D.size();i++){
+		file<<D.at(i).getX();
+		file<<D.at(i).getY();
+	}
+	file<<'R';
+	for(int i = 0; (unsigned)i< R.size();i++){
+		file<<R.at(i).getX();
+		file<<R.at(i).getY();
+	}
+	file<<'G';
+	for(int i = 0; (unsigned)i< G.size();i++){
+		file<<G.at(i).getX();
+		file<<G.at(i).getY();
+	}	
+	file<<'T';
+	for(int i = 0; (unsigned)i< P.size();i++){
+		file<<P.at(i).getX();
+		file<<P.at(i).getY();
+	}
+	file.close();
+}
+
 int main(){
 	char T[LONGUEUR][LARGEUR];
 	vector<reumu> R;
@@ -72,5 +122,7 @@ int main(){
 	init(T,'$');
 	init(T,'X');
 	init(T,'*');
+	tableToVector(T,R,D,G,P);
+	creationFichier(R,D,G,P);
 	return 0;
 }
