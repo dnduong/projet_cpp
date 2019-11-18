@@ -89,23 +89,36 @@ void creationFichier(vector<reumu> & R, vector<diams> & D, vector<geurchar> & G,
 	}
 	file<<'D';
 	for(int i = 0; (unsigned)i< D.size();i++){
+		file<<'x';
 		file<<D.at(i).getX();
+		file<<'y';
 		file<<D.at(i).getY();
+		file<<',';
+
 	}
 	file<<'R';
 	for(int i = 0; (unsigned)i< R.size();i++){
+		file<<'x';
 		file<<R.at(i).getX();
+		file<<'y';
 		file<<R.at(i).getY();
+		file<<',';
 	}
 	file<<'G';
 	for(int i = 0; (unsigned)i< G.size();i++){
+		file<<'x';
 		file<<G.at(i).getX();
+		file<<'y';
 		file<<G.at(i).getY();
+		file<<',';
 	}	
 	file<<'T';
 	for(int i = 0; (unsigned)i< P.size();i++){
+		file<<'x';
 		file<<P.at(i).getX();
+		file<<'y';
 		file<<P.at(i).getY();
+		file<<',';
 	}
 	file.close();
 }
