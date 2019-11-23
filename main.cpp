@@ -4,8 +4,10 @@
 #include "reumu.hpp"
 #include "geurchar.hpp"
 #include "mobile.hpp"
-#include <vector>
 #include "commun.hpp"
+#include "oueurj.hpp"
+#include "streumon.hpp"
+#include <vector>
 #include <string>
 #include <fstream>
 using namespace std;
@@ -55,7 +57,7 @@ void importFichier(char T[LONGUEUR][LARGEUR], vector<reumu> & R, vector<diams> &
 			in_x = true;
 		}else if (c == 'y'){
 			in_x = false;
-		}else{	
+		}else{
 			if(in_x){
 				x+=c;
 			}else{
@@ -79,7 +81,7 @@ void vectorToTable(char T[LONGUEUR][LARGEUR], vector<reumu> & R, vector<diams> &
 	}
 	for(int i = 0; (unsigned)i< G.size();i++){
 		T[G.at(i).getY()][G.at(i).getX()]='*';
-	}	
+	}
 	for(int i = 0; (unsigned)i< P.size();i++){
 		T[P.at(i).getY()][P.at(i).getX()]='-';
 	}
@@ -114,7 +116,7 @@ void move(mobile & J, char & c,char T[LONGUEUR][LARGEUR]){
 		default:
 			break;
 	}
-	
+	J.move(T);
 }
 
 int main(){

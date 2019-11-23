@@ -5,6 +5,7 @@
 #define LONGUEUR 10
 #define LARGEUR 50
 
+
 class element
 {
 protected:
