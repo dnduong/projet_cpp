@@ -6,6 +6,7 @@
 
 class geurchar: public element{
 public:
+	void ouAller(int,int);
 	geurchar(int,int);
 	virtual ~geurchar();
 };
