@@ -4,8 +4,8 @@ creator : creator.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o
 	$(CPP) -o creator creator.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o
 creator.o : creator.cpp
 	$(CPP) -c creator.cpp
-main : main.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o
-	$(CPP) -o main main.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o
+main : main.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o oueurj.o
+	$(CPP) -o main main.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o oueurj.o
 main.o : main.cpp
 	$(CPP) -c main.cpp
 element.o : element.cpp
@@ -18,9 +18,10 @@ reumu.o : reumu.cpp
 	$(CPP) -c reumu.cpp
 geurchar.o : geurchar.cpp
 	$(CPP) -c geurchar.cpp
-mobile.o : mobile.cpp mobile.hpp
+mobile.o : mobile.cpp
 	$(CPP) -c mobile.cpp
-
+oueurj.o : oueurj.cpp
+		$(CPP) -c oueurj.cpp
 
 clean :
 	rm *.o

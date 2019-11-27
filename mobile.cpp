@@ -4,13 +4,11 @@ mobile::mobile(int x, int y):element(x,y){}
 
 mobile::~mobile(){}
 
-void mobile::move(char T[LONGUEUR][LARGEUR],int a,int b){
-	if(T[b][a]=='\0'){
-		T[this->y][this->x] = '\0';
-		this->y = b;
-		this->x = a;
-		T[this->y][this->x] = 'J';
-	}
+void mobile::move_without_condition(char T[LONGUEUR][LARGEUR],int a,int b, char c){
+	T[this->y][this->x] = '\0';
+	this->y = b;
+	this->x = a;
+	T[this->y][this->x] = c;
 }
 
 void mobile::gauche(char T[LONGUEUR][LARGEUR]){

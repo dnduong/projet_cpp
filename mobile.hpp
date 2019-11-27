@@ -5,11 +5,7 @@
 #include <iostream>
 
 class mobile: public element{
-private:
-	void move(char [LONGUEUR][LARGEUR],int,int);
-public:
-	int getLONGUEUR();
-	int getLARGEUR();
+protected:
 	void gauche(char [LONGUEUR][LARGEUR]);
 	void droite(char [LONGUEUR][LARGEUR]);
 	void haut(char [LONGUEUR][LARGEUR]);
@@ -18,6 +14,9 @@ public:
 	void nord_est(char [LONGUEUR][LARGEUR]);
 	void sud_ouest(char [LONGUEUR][LARGEUR]);
 	void sud_est(char [LONGUEUR][LARGEUR]);
+	virtual void move(char [LONGUEUR][LARGEUR],int,int);
+	void move_without_condition(char [LONGUEUR][LARGEUR],int,int,char);
+public:
 	mobile(int,int);
 	virtual ~mobile();
 };

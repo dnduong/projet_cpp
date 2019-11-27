@@ -6,7 +6,6 @@
 #include "mobile.hpp"
 #include "commun.hpp"
 #include "oueurj.hpp"
-#include "streumon.hpp"
 #include <vector>
 #include <string>
 #include <fstream>
@@ -87,38 +86,6 @@ void vectorToTable(char T[LONGUEUR][LARGEUR], vector<reumu> & R, vector<diams> &
 	}
 }
 
-void move(mobile & J, char & c,char T[LONGUEUR][LARGEUR]){
-	switch(c){
-		case 'q' :
-			J.gauche(T);
-			break;
-		case 'd' :
-			J.droite(T);
-			break;
-		case 'z':
-			J.haut(T);
-			break;
-		case 's':
-			J.bas(T);
-			break;
-		case 'a':
-			J.nord_ouest(T);
-			break;
-		case 'e':
-			J.nord_est(T);
-			break;
-		case 'w':
-			J.sud_ouest(T);
-			break;
-		case 'c':
-			J.sud_est(T);
-			break;
-		default:
-			break;
-	}
-	J.move(T);
-}
-
 int main(){
 	char T[LONGUEUR][LARGEUR];
 	vector<reumu> R;
@@ -128,13 +95,13 @@ int main(){
 	init_plateau(T);
 	importFichier(T,R,D,G,P);
 	vectorToTable(T,R,D,G,P);
-	mobile J(5,5);
+	oueurj J(5,5);
 	init_joueur(J,T);
 	draw(T);
 	while(1){
 		char c;
 		cin>>c;
-		move(J,c,T);
+		J.keyboard_control(c,T);
 		draw(T);
 	}
 	return 0;

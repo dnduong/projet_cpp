@@ -7,11 +7,11 @@
 class oueurj: public mobile{
 private:
 	int nbDiams;
-	int nbVies;
 	int niveauCourant;
 	int nbTeleport;
 public:
-	void move(char [LONGUEUR][LARGEUR]);
+	virtual void move(char [LONGUEUR][LARGEUR],int a, int b);
+	void keyboard_control(char & ,char [LONGUEUR][LARGEUR]);
 	void afficheNbDiams();
 	void afficheNbTeleport();
 	oueurj(int,int);
