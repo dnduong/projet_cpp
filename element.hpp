@@ -2,10 +2,8 @@
 #define ELEMENT
 #include <cstdlib>
 #include <iostream>
-#define LONGUEUR 10
-#define LARGEUR 50
-
-
+#include <vector>
+using namespace std;
 class element
 {
 protected:
@@ -13,6 +11,7 @@ protected:
 public:
 	int getX();
 	int getY();
+	static void remove_V(vector<element> &, int &,int &);
 	element(int,int);
 	virtual ~element();
 };

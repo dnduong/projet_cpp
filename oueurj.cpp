@@ -1,21 +1,32 @@
 #include "oueurj.hpp"
 using namespace std;
 
-oueurj::oueurj(int x, int y):mobile(x,y){}
+oueurj::oueurj(int x, int y):mobile(x,y),nbDiams(0){}
 
 oueurj::~oueurj(){}
 
-void oueurj::move(char T[LONGUEUR][LARGEUR],int a,int b, vector<geurchar> & G){
+bool oueurj::move(vector<vector<char>> &T,vector<element> & R, vector<element> & D, vector<element> & G, vector<element> & P,int a,int b){
   if(T[b][a]=='\0'){
-    this->move_without_condition(T,a,b,'J');
+    this->move_without_condition(a,b);
+    return true;
 	}
 
   if (T[b][a]=='$'){
     this->nbDiams++;
-    this->move_without_condition(T,a,b,'J');
+    element::remove_V(D,a,b);
+    unsigned int p = this->nbDiams++;
+    if(p<P.size()){
+      static_cast<teupor *>(&(P[p]))->ouvrir();
+    }
+    this->move_without_condition(a,b);
+    return true;
   }
   
-  if (T[this->y][this->x]=='*'){
+  if (T[b][a]=='-' || T[b][a] == 'X'){
+    cout<<"passage interdit !"<<endl;
+  }
+  return false;
+  /*if (T[this->y][this->x]=='*'){
     for (int i=0; i<G.size(); i++){
       if (G.at(i).getX()==this->x && G.at(i).get_Y()==this->y){
         G.at(i).ou_aller(T);
@@ -29,52 +40,47 @@ void oueurj::move(char T[LONGUEUR][LARGEUR],int a,int b, vector<geurchar> & G){
     this->move_without_condition(T,a,b,'S');
     cout<<"Oups ! Un streumon a eu votre peau..."<<endl;
   }
-  /*if (this->nbVies==0){
+  if (this->nbVies==0){
     cout<<"plus de Vies, vous êtes mort(DCD)..."<<endl;
-  }*/
-  if (T[b][a]=='-' || T[b][a] == 'X'){
-    cout<<"passage interdit !"<<endl;
   }
-  /*if (T[b][a]=='+'){
+
+  if (T[b][a]=='+'){
     //passage au prochain plateau
   }*/
 }
 
-void oueurj::keyboard_control(char & c,char T[LONGUEUR][LARGEUR]){
+bool oueurj::keyboard_control(char & c,vector<vector<char>> &T,vector<element> & R, vector<element> & D, vector<element> & G, vector<element> & P){
 	switch(c){
 		case 'q' :
-			this->gauche(T);
+			return this->gauche(T,R,D,G,P);
 			break;
 		case 'd' :
-			this->droite(T);
+			return this->droite(T,R,D,G,P);
 			break;
 		case 'z':
-			this->haut(T);
+			return this->haut(T,R,D,G,P);
 			break;
 		case 's':
-			this->bas(T);
+			return this->bas(T,R,D,G,P);
 			break;
 		case 'a':
-			this->nord_ouest(T);
+			return this->nord_ouest(T,R,D,G,P);
 			break;
 		case 'e':
-			this->nord_est(T);
+			return this->nord_est(T,R,D,G,P);
 			break;
 		case 'w':
-			this->sud_ouest(T);
+			return this->sud_ouest(T,R,D,G,P);
 			break;
 		case 'c':
-			this->sud_est(T);
+			return this->sud_est(T,R,D,G,P);
 			break;
 		default:
+      return false;
 			break;
 	}
 }
 
 void oueurj::afficheNbDiams(){
   cout<<"Nb Diams mangés :"<<nbDiams<<endl;
-}
-
-void oueurj::afficheNbTeleport(){
-  cout<<"Nombre de téléportations : "<<nbTeleport<<endl;
 }

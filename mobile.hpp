@@ -1,21 +1,21 @@
 #ifndef MOBILE
 #define MOBILE
-#include "element.hpp"
 #include <cstdlib>
 #include <iostream>
-
+#include "element.hpp"
+using namespace std;
 class mobile: public element{
 protected:
-	void gauche(char [LONGUEUR][LARGEUR]);
-	void droite(char [LONGUEUR][LARGEUR]);
-	void haut(char [LONGUEUR][LARGEUR]);
-	void bas(char [LONGUEUR][LARGEUR]);
-	void nord_ouest(char [LONGUEUR][LARGEUR]);
-	void nord_est(char [LONGUEUR][LARGEUR]);
-	void sud_ouest(char [LONGUEUR][LARGEUR]);
-	void sud_est(char [LONGUEUR][LARGEUR]);
-	virtual void move(char [LONGUEUR][LARGEUR],int,int) = 0;
-	void move_without_condition(char [LONGUEUR][LARGEUR],int,int,char);
+	bool gauche(vector<vector<char>> &,vector<element> &, vector<element> &, vector<element> &, vector<element> &);
+	bool droite(vector<vector<char>> &,vector<element> &, vector<element> &, vector<element> &, vector<element> &);
+	bool haut(vector<vector<char>> &,vector<element> &, vector<element> &, vector<element> &, vector<element> &);
+	bool bas(vector<vector<char>> &,vector<element> &, vector<element> &, vector<element> &, vector<element> &);
+	bool nord_ouest(vector<vector<char>> &,vector<element> &, vector<element> &, vector<element> &, vector<element> &);
+	bool nord_est(vector<vector<char>> &,vector<element> &, vector<element> &, vector<element> &, vector<element> &);
+	bool sud_ouest(vector<vector<char>> &,vector<element> &, vector<element> &, vector<element> &, vector<element> &);
+	bool sud_est(vector<vector<char>> &,vector<element> &, vector<element> &, vector<element> &, vector<element> &);
+	virtual bool move(vector<vector<char>> &,vector<element> &, vector<element> &, vector<element> &, vector<element> &,int,int) = 0;
+	void move_without_condition(int,int);
 public:
 	mobile(int,int);
 	virtual ~mobile();

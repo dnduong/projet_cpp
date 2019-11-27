@@ -9,6 +9,7 @@ private:
 	bool ouvert;
 public:
 	teupor(int,int);
+	bool estOuvert();
 	virtual ~teupor();
 	void ouvrir();
 };
