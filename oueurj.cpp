@@ -5,7 +5,7 @@ oueurj::oueurj(int x, int y):mobile(x,y){}
 
 oueurj::~oueurj(){}
 
-void oueurj::move(char T[LONGUEUR][LARGEUR],int a,int b){
+void oueurj::move(char T[LONGUEUR][LARGEUR],int a,int b, vector<geurchar> & G){
   if(T[b][a]=='\0'){
     this->move_without_condition(T,a,b,'J');
 	}
@@ -14,10 +14,16 @@ void oueurj::move(char T[LONGUEUR][LARGEUR],int a,int b){
     this->nbDiams++;
     this->move_without_condition(T,a,b,'J');
   }
-  /*if (T[b][a]=='*'){
-    //nouvelle position : l'utilisateur choisit ou pas ??
+  
+  if (T[this->y][this->x]=='*'){
+    for (int i=0; i<G.size(); i++){
+      if (G.at(i).getX()==this->x && G.at(i).get_Y()==this->y){
+        G.at(i).ou_aller(T);
+      }
+  }
     this->nbTeleport++;
-  }*/
+  }
+
   if (T[b][a]=='S'){
     //this->nbVies--;
     this->move_without_condition(T,a,b,'S');

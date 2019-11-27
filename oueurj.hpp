@@ -10,7 +10,7 @@ private:
 	int niveauCourant;
 	int nbTeleport;
 public:
-	virtual void move(char [LONGUEUR][LARGEUR],int a, int b);
+  virtual void move(char [LONGUEUR][LARGEUR],int a, int b, vector<geurchar> & );
 	void keyboard_control(char & ,char [LONGUEUR][LARGEUR]);
 	void afficheNbDiams();
 	void afficheNbTeleport();
