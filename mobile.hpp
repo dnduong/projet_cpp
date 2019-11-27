@@ -14,7 +14,7 @@ protected:
 	void nord_est(char [LONGUEUR][LARGEUR]);
 	void sud_ouest(char [LONGUEUR][LARGEUR]);
 	void sud_est(char [LONGUEUR][LARGEUR]);
-	virtual void move(char [LONGUEUR][LARGEUR],int,int);
+	virtual void move(char [LONGUEUR][LARGEUR],int,int) = 0;
 	void move_without_condition(char [LONGUEUR][LARGEUR],int,int,char);
 public:
 	mobile(int,int);

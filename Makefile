@@ -21,7 +21,7 @@ geurchar.o : geurchar.cpp
 mobile.o : mobile.cpp
 	$(CPP) -c mobile.cpp
 oueurj.o : oueurj.cpp
-		$(CPP) -c oueurj.cpp
+	$(CPP) -c oueurj.cpp
 
 clean :
 	rm *.o

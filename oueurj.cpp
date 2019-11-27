@@ -10,15 +10,15 @@ void oueurj::move(char T[LONGUEUR][LARGEUR],int a,int b){
     this->move_without_condition(T,a,b,'J');
 	}
 
-  if (T[this->y][this->x]=='$'){
+  if (T[b][a]=='$'){
     this->nbDiams++;
     this->move_without_condition(T,a,b,'J');
   }
-  /*if (T[this->y][this->x]=='*'){
+  /*if (T[b][a]=='*'){
     //nouvelle position : l'utilisateur choisit ou pas ??
     this->nbTeleport++;
   }*/
-  if (T[this->y][this->x]=='S'){
+  if (T[b][a]=='S'){
     //this->nbVies--;
     this->move_without_condition(T,a,b,'S');
     cout<<"Oups ! Un streumon a eu votre peau..."<<endl;
@@ -26,10 +26,10 @@ void oueurj::move(char T[LONGUEUR][LARGEUR],int a,int b){
   /*if (this->nbVies==0){
     cout<<"plus de Vies, vous êtes mort(DCD)..."<<endl;
   }*/
-  if (T[this->y][this->x]=='-' || T[this->y][this->x] == 'X'){
+  if (T[b][a]=='-' || T[b][a] == 'X'){
     cout<<"passage interdit !"<<endl;
   }
-  /*if (T[this->y][this->x]=='+'){
+  /*if (T[b][a]=='+'){
     //passage au prochain plateau
   }*/
 }
