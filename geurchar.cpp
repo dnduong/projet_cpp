@@ -6,6 +6,10 @@ geurchar::geurchar(int x, int y):element(x,y){
   y = rand()%LONGUEUR;*/
 }
 
+char geurchar::graphic(){
+	return '*';
+}
+
 geurchar::~geurchar(){}
 
 /*void geurchar::ou_aller(char T[LONGUEUR][LARGEUR]){

@@ -5,19 +5,19 @@ oueurj::oueurj(int x, int y):mobile(x,y),nbDiams(0){}
 
 oueurj::~oueurj(){}
 
-bool oueurj::move(vector<vector<char>> &T,vector<element> & R, vector<element> & D, vector<element> & G, vector<element> & P,int a,int b){
+bool oueurj::move(vector<vector<char>> &T,vector<element *> & R, vector<element *> & D, vector<element *> & G, vector<element *> & P,int a,int b){
   if(T[b][a]=='\0'){
     this->move_without_condition(a,b);
     return true;
 	}
 
   if (T[b][a]=='$'){
-    this->nbDiams++;
     element::remove_V(D,a,b);
-    unsigned int p = this->nbDiams++;
+    unsigned int p = this->nbDiams;
     if(p<P.size()){
-      static_cast<teupor *>(&(P[p]))->ouvrir();
+      dynamic_cast<teupor *>(P[p])->ouvrir();
     }
+    this->nbDiams++;
     this->move_without_condition(a,b);
     return true;
   }
@@ -48,8 +48,11 @@ bool oueurj::move(vector<vector<char>> &T,vector<element> & R, vector<element> &
     //passage au prochain plateau
   }*/
 }
+char oueurj::graphic(){
+  return 'J';
+}
 
-bool oueurj::keyboard_control(char & c,vector<vector<char>> &T,vector<element> & R, vector<element> & D, vector<element> & G, vector<element> & P){
+bool oueurj::keyboard_control(char & c,vector<vector<char>> &T,vector<element *> & R, vector<element *> & D, vector<element *> & G, vector<element *> & P){
 	switch(c){
 		case 'q' :
 			return this->gauche(T,R,D,G,P);

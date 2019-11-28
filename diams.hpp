@@ -4,9 +4,10 @@
 #include <cstdlib>
 #include <iostream>
 
-class diams: public element{
+class diams:public element{
 public:
 	diams(int,int);
+	virtual char graphic();
 	virtual ~diams();
 };
 

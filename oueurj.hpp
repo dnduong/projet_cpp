@@ -7,10 +7,11 @@ class oueurj: public mobile{
 private:
 	int nbDiams;
 public:
-  	virtual bool move(vector<vector<char>> &,vector<element> &, vector<element> &, vector<element> &, vector<element> &,int,int);
-	bool keyboard_control(char & ,vector<vector<char>> &,vector<element> &, vector<element> &, vector<element> &, vector<element> &);
+  	virtual bool move(vector<vector<char>> &,vector<element *> &, vector<element *> &, vector<element *> &, vector<element *> &,int,int);
+	bool keyboard_control(char & ,vector<vector<char>> &,vector<element *> &, vector<element *> &, vector<element *> &, vector<element *> &);
 	void afficheNbDiams();
 	oueurj(int,int);
+	virtual char graphic();
 	virtual ~oueurj();
 };
 

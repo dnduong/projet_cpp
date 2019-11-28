@@ -9,9 +9,10 @@ class element
 protected:
 	int x,y;
 public:
+	virtual char graphic()=0;
 	int getX();
 	int getY();
-	static void remove_V(vector<element> &, int &,int &);
+	static void remove_V(vector<element *> &, int &,int &);
 	element(int,int);
 	virtual ~element();
 };

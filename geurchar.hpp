@@ -6,9 +6,10 @@
 #include <iostream>
 #include <vector>
 
-class geurchar: public element{
+class geurchar:public element{
 public:
 	//void ou_aller(vector<vector<char>>);
+	virtual char graphic();
 	geurchar(int,int);
 	virtual ~geurchar();
 };

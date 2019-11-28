@@ -7,6 +7,7 @@
 class reumu: public element{
 public:
 	reumu(int,int);
+	virtual char graphic();
 	virtual ~reumu();
 };
 

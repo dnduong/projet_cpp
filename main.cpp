@@ -12,7 +12,7 @@ using namespace std;
 int longueur;
 int largeur;
 
-void importFichier(vector<element> & R, vector<element> & D, vector<element> & G, vector<element> & P){
+void importFichier(vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P){
 	string fn;
 	cout<<"Entrer le nom du fichier"<<endl;
 	cin>>fn;
@@ -39,19 +39,19 @@ void importFichier(vector<element> & R, vector<element> & D, vector<element> & G
 			type = 5;
 		}else if (c == ','){
 			if(type == 1){
-				D.push_back(diams(stoi(x),stoi(y)));
+				D.push_back(new diams(stoi(x),stoi(y)));
 				x = "";
 				y = "";
 			}else if(type == 2){
-				G.push_back(geurchar(stoi(x),stoi(y)));
+				G.push_back(new geurchar(stoi(x),stoi(y)));
 				x = "";
 				y = "";
 			}else if(type == 3){
-				R.push_back(reumu(stoi(x),stoi(y)));
+				R.push_back(new reumu(stoi(x),stoi(y)));
 				x = "";
 				y = "";
 			}else if(type == 4){
-				P.push_back(teupor(stoi(x),stoi(y)));
+				P.push_back(new teupor(stoi(x),stoi(y)));
 				x = "";
 				y = "";
 			}else{
@@ -75,38 +75,27 @@ void importFichier(vector<element> & R, vector<element> & D, vector<element> & G
 	file.close();
 }
 
-void iterVector(vector<vector<char>> &T,vector<element> & V,char c){
+void iterVector(vector<vector<char>> &T,vector<element*> & V){
 	for (auto v : V){
-		T[v.getY()][v.getX()]=c;
+		T[v->getY()][v->getX()]= v->graphic();
 	}
 }
 
-void iterVectorP(vector<vector<char>> &T,vector<element> &P){
-	for(unsigned int i = 0; i< P.size(); i++){
-		teupor * p = static_cast<teupor *>(&(P[i]));
-		if(p->estOuvert()){
-			T[p->getY()][p->getX()]='+';
-		}else{
-			T[p->getY()][p->getX()]='-';
-		}
-	}
-}
-
-void update(vector<vector<char>> &T, vector<element> & R, vector<element> & D, vector<element> & G, vector<element> & P, oueurj &J){
+void update(vector<vector<char>> &T, vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P, oueurj &J){
 	T[J.getY()][J.getX()] = 'J';
-	iterVector(T,R,'X');
-	iterVector(T,D,'$');
-	iterVector(T,G,'*');
-	iterVectorP(T,P);
+	iterVector(T,R);
+	iterVector(T,D);
+	iterVector(T,G);
+	iterVector(T,P);
 }
 
 int main(){
 	char c;
 	vector<vector<char>> T;
-	vector<element> R;
-	vector<element> D;
-	vector<element> G;
-	vector<element> P;
+	vector<element*> R;
+	vector<element*> D;
+	vector<element*> G;
+	vector<element*> P;
 	oueurj J(5,5);
 	importFichier(R,D,G,P);
 	init_plateau(T,longueur,largeur);

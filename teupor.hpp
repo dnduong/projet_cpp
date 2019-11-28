@@ -4,12 +4,12 @@
 #include <cstdlib>
 #include <iostream>
 
-class teupor: public element{
+class teupor:public element{
 private:
 	bool ouvert;
 public:
 	teupor(int,int);
-	bool estOuvert();
+	virtual char graphic();
 	virtual ~teupor();
 	void ouvrir();
 };
