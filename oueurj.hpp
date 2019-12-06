@@ -3,6 +3,7 @@
 #include "mobile.hpp"
 #include "teupor.hpp"
 
+
 class oueurj: public mobile{
 private:
 	int nbDiams;

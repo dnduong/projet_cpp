@@ -9,6 +9,8 @@
 #include <string>
 #include <fstream>
 #include <cctype>
+#include <chrono>
+#include <random>
 using namespace std;
 
 int longueur;
@@ -67,17 +69,17 @@ void init(vector<vector<char>> & T, char ch){
 	}
 }
 
-void codage(vector<element> &V, fstream & file){
+void codage(vector<element*> &V, fstream & file){
 	for (auto v: V){
 		file<<'x';
-		file<<v.getX();
+		file<<v->getX();
 		file<<'y';
-		file<<v.getY();
+		file<<v->getY();
 		file<<',';
 	}
 }
 
-void creationFichier(vector<element> & R, vector<element> & D, vector<element> & G, vector<element> & P){
+void creationFichier(vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P){
 	string fn;
 	cout<<"Entrer le nom du fichier"<<endl;
 	cin>>fn;
@@ -104,17 +106,17 @@ void creationFichier(vector<element> & R, vector<element> & D, vector<element> &
 	file.close();
 }
 
-void tableToVector(vector<vector<char>> &T, vector<element> & R, vector<element> & D, vector<element> & G, vector<element> & P){
+void tableToVector(vector<vector<char>> &T, vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P){
 	for(unsigned int i = 0; i< T.size(); i++){
 		for(unsigned int j = 0; j< T.at(i).size(); j++){
 			if(T[i][j] == 'X'){
-				R.push_back(reumu(j,i));
+				R.push_back(new reumu(j,i));
 			}else if(T[i][j] == '$'){
-				D.push_back(diams(j,i));
+				D.push_back(new diams(j,i));
 			}else if(T[i][j] == '*'){
-				G.push_back(geurchar(j,i));
+				G.push_back(new geurchar(j,i));
 			}else if(T[i][j] == '-'){
-				P.push_back(teupor(j,i));
+				P.push_back(new teupor(j,i));
 			}
 		}
 	}
@@ -129,7 +131,7 @@ void init_reumu(vector<vector<char>> & T){
 		T[longueur-1][i]='X';
 		T[0][i]='X';
 	}
-	draw(T);
+	//draw(T);
 }
 
 int enter_digit(string & c){
@@ -152,18 +154,59 @@ void init_plateau_creator(vector<vector<char>> & T){
 	init_plateau(T,longueur,largeur);
 }
 
+void init_random(vector<vector<char>> &T, char ch){
+	string c;
+	string d;
+	switch(ch){
+		case '$' : 
+			d = "diams";
+			break;
+		case 'X' :
+			d = "murs";
+			break;
+		case '*' :
+			d = "geurchar";
+			break;
+		case '-' : 
+			d = "teupor";
+			break;
+		default :
+			break;
+	}
+	cout<<"Entrer le nombre de " + d + " :"<<endl;
+	int nb = enter_digit(c);
+	unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+	default_random_engine generator (seed);
+	uniform_int_distribution<int> distribution_y(0,longueur-1);
+	uniform_int_distribution<int> distribution_x(0,largeur-1);
+	int x,y;
+	for(int i = 0; i< nb; i++){
+		x = distribution_x(generator);
+		y = distribution_y(generator);
+		if(T[y][x] == 'X' && ch == '-'){
+			T[y][x]= ch;
+		}else if(T[y][x] == '\0' && ch != '-'){
+			T[y][x]= ch;
+		}else{
+			i--;
+		}	
+	}
+
+}
+
 int main(){
 	vector<vector<char>> T;
-	vector<element> R;
-	vector<element> D;
-	vector<element> G;
-	vector<element> P;
+	vector<element*> R;
+	vector<element*> D;
+	vector<element*> G;
+	vector<element*> P;
 	init_plateau_creator(T);
 	init_reumu(T);
-	init(T,'-');
-	init(T,'$');
-	init(T,'X');
-	init(T,'*');
+	init_random(T,'-');
+	init_random(T,'$');
+	init_random(T,'X');
+	init_random(T,'*');
+	draw(T);
 	tableToVector(T,R,D,G,P);
 	creationFichier(R,D,G,P);
 	return 0;
