@@ -5,7 +5,7 @@ creator : creator.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o
 creator.o : creator.cpp
 	$(CPP) -c creator.cpp
 main : main.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o oueurj.o
-	$(CPP) -o main main.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o oueurj.o
+	$(CPP) -o main main.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o oueurj.o -lncurses
 main.o : main.cpp
 	$(CPP) -c main.cpp
 element.o : element.cpp

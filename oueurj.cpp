@@ -1,9 +1,13 @@
 #include "oueurj.hpp"
 using namespace std;
 
-oueurj::oueurj(int x, int y):mobile(x,y),nbDiams(0){}
+oueurj::oueurj(int x, int y):mobile(x,y),nbDiams(0),nbTeles(0),gagne(false){}
 
 oueurj::~oueurj(){}
+
+bool oueurj::estGagner(){
+  return this->gagne;
+}
 
 bool oueurj::move(vector<vector<char>> &T,vector<element *> & R, vector<element *> & D, vector<element *> & G, vector<element *> & P,int a,int b){
   if(T[b][a]=='\0'){
@@ -13,27 +17,31 @@ bool oueurj::move(vector<vector<char>> &T,vector<element *> & R, vector<element 
 
   if (T[b][a]=='$'){
     element::remove_V(D,a,b);
+    //ouvrir la porte
     unsigned int p = this->nbDiams;
     if(p<P.size()){
       dynamic_cast<teupor *>(P[p])->ouvrir();
     }
+    //
     this->nbDiams++;
     this->move_without_condition(a,b);
     return true;
   }
+
+  if (T[b][a]=='*'){
+    element::remove_V(G,a,b);
+    this->nbTeles++;
+    this->move_without_condition(a,b);
+    return true;
+  }
+
+  if (T[b][a]=='+'){
+    this->gagne = true;
+    return true;
+  }
   
-  if (T[b][a]=='-' || T[b][a] == 'X'){
-    cout<<"passage interdit !"<<endl;
-  }
   return false;
-  /*if (T[this->y][this->x]=='*'){
-    for (int i=0; i<G.size(); i++){
-      if (G.at(i).getX()==this->x && G.at(i).get_Y()==this->y){
-        G.at(i).ou_aller(T);
-      }
-  }
-    this->nbTeleport++;
-  }
+  /*
 
   if (T[b][a]=='S'){
     //this->nbVies--;
@@ -44,12 +52,10 @@ bool oueurj::move(vector<vector<char>> &T,vector<element *> & R, vector<element 
     cout<<"plus de Vies, vous êtes mort(DCD)..."<<endl;
   }
 
-  if (T[b][a]=='+'){
-    //passage au prochain plateau
-  }*/
+  */
 }
 char oueurj::graphic(){
-  return 'J';
+  return '@';
 }
 
 bool oueurj::keyboard_control(char & c,vector<vector<char>> &T,vector<element *> & R, vector<element *> & D, vector<element *> & G, vector<element *> & P){
@@ -84,6 +90,10 @@ bool oueurj::keyboard_control(char & c,vector<vector<char>> &T,vector<element *>
 	}
 }
 
-void oueurj::afficheNbDiams(){
-  cout<<"Nb Diams mangés :"<<nbDiams<<endl;
+int oueurj::getNbDiams(){
+  return nbDiams;
+}
+
+int oueurj::getNbTeles(){
+  return nbTeles;
 }

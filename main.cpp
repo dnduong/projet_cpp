@@ -12,7 +12,7 @@ using namespace std;
 int longueur;
 int largeur;
 
-void importFichier(vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P){
+bool importFichier(vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P){
 	string fn;
 	cout<<"Entrer le nom du fichier"<<endl;
 	cin>>fn;
@@ -20,7 +20,7 @@ void importFichier(vector<element*> & R, vector<element*> & D, vector<element*> 
 	file.open(fn,ios::in);
 	if(!file){
 		cout<<"Création échouée"<<endl;
-		return;
+		return false;
 	}
 	char c;
 	int type;
@@ -73,6 +73,7 @@ void importFichier(vector<element*> & R, vector<element*> & D, vector<element*> 
 		}
 	}
 	file.close();
+	return true;
 }
 
 void iterVector(vector<vector<char>> &T,vector<element*> & V){
@@ -82,13 +83,41 @@ void iterVector(vector<vector<char>> &T,vector<element*> & V){
 }
 
 void update(vector<vector<char>> &T, vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P, oueurj &J){
-	T[J.getY()][J.getX()] = 'J';
+	T[J.getY()][J.getX()] = J.graphic();
 	iterVector(T,R);
 	iterVector(T,D);
 	iterVector(T,G);
 	iterVector(T,P);
 }
 
+void clear(vector<vector<char>> &T){
+	clear();
+	for(unsigned int i = 0; i< T.size(); i++){
+		for (unsigned int j = 0; j< T[i].size(); j++){
+			T[i][j]='\0';
+		}
+	}
+}
+
+void draw(vector<vector<char>> & T,oueurj &J){
+	for(unsigned int i = 0; i< T.size(); i++){
+		for (unsigned int j = 0; j< T[i].size(); j++){
+			mvprintw(i,j,"%c",T[i][j]);
+		}
+	}
+
+	mvprintw(0,largeur+5,"Diams : %d",J.getNbDiams());
+	mvprintw(1,largeur+5,"Téléportations : %d",J.getNbTeles());
+}
+
+
+void clear(vector<vector<char>> &T, vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P, oueurj &J){
+	T.clear();
+	R.clear();
+	D.clear();
+	G.clear();
+	P.clear();
+}
 int main(){
 	char c;
 	vector<vector<char>> T;
@@ -96,18 +125,27 @@ int main(){
 	vector<element*> D;
 	vector<element*> G;
 	vector<element*> P;
-	oueurj J(5,5);
-	importFichier(R,D,G,P);
-	init_plateau(T,longueur,largeur);
-	update(T,R,D,G,P,J);
-	draw(T);
-	while(1){
-		cin>>c;
-		if(J.keyboard_control(c,T,R,D,G,P)){
-			clear(T);
+	do{
+		oueurj J(5,5);
+		if(importFichier(R,D,G,P)){
+			init_plateau(T,longueur,largeur);
+			initscr();
+			cbreak();
+			noecho();
 			update(T,R,D,G,P,J);
-		}
-		draw(T);
-	}
+			draw(T,J);
+			while(!J.estGagner()){
+				c = getch();
+				if(J.keyboard_control(c,T,R,D,G,P)){
+					clear(T);
+					update(T,R,D,G,P,J);
+					draw(T,J);
+				}
+			}
+			clear();
+			endwin();
+			clear(T,R,D,G,P,J);
+		}		
+	}while(1);
 	return 0;
 }
