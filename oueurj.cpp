@@ -54,6 +54,24 @@ bool oueurj::move(vector<vector<char>> &T,vector<element *> & R, vector<element 
 
   */
 }
+bool oueurj::teleport(vector<vector<char>> &T,vector<element *> & R, vector<element *> & D, vector<element *> & G, vector<element *> & P){
+  if(this->nbTeles <= 0){
+    return false;
+  }
+  unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+  default_random_engine generator (seed);
+  uniform_int_distribution<int> distribution_y(1,T.size()-2);
+  uniform_int_distribution<int> distribution_x(1,T[0].size()-2);
+  bool mv = false;
+  int xPrev = this->x;
+  int yPrev = this->y;
+  while (!mv){
+    mv = this->move(T,R,D,G,P,distribution_x(generator),distribution_y(generator)) && (xPrev != this->x) && (yPrev != this->y);
+  }
+  this->nbTeles--;
+  return true;
+}
+
 char oueurj::graphic(){
   return '@';
 }
@@ -84,6 +102,8 @@ bool oueurj::keyboard_control(char & c,vector<vector<char>> &T,vector<element *>
 		case 'c':
 			return this->sud_est(T,R,D,G,P);
 			break;
+    case 'g':
+      return this->teleport(T,R,D,G,P);
 		default:
       return false;
 			break;
