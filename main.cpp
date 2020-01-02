@@ -7,12 +7,18 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include "streumon.hpp"
 using namespace std;
 
-int longueur;
-int largeur;
+vector<int> longueur;
+vector<int> largeur;
+void init_vector(vector<vector<element*>> & V,int t){
+	for(int i = 0; i<t; i++){
+		V.push_back(vector<element*>());
+	}
+}
 
-bool importFichier(vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P){
+bool importFichier(vector<vector<element*>> & R, vector<vector<element*>> & D, vector<vector<element*>> & G, vector<vector<element*>> & P,vector<vector<element*>> &S, oueurj &J){
 	string fn;
 	cout<<"Entrer le nom du fichier"<<endl;
 	cin>>fn;
@@ -22,6 +28,7 @@ bool importFichier(vector<element*> & R, vector<element*> & D, vector<element*> 
 		cout<<"Création échouée"<<endl;
 		return false;
 	}
+	int nivC = 0;
 	char c;
 	int type;
 	bool in_x;
@@ -35,28 +42,47 @@ bool importFichier(vector<element*> & R, vector<element*> & D, vector<element*> 
 			type = 3;
 		}else if (c == 'T'){
 			type = 4;
-		}else if (c == 'S'){
+		}else if (c == 'M'){
 			type = 5;
+		}else if (c == 'S'){
+			nivC++;
+			type = 6;
+		}else if (c == 'L'){
+			type = 7;
 		}else if (c == ','){
 			if(type == 1){
-				D.push_back(new diams(stoi(x),stoi(y)));
+				D.at(nivC-1).push_back(new diams(stoi(x),stoi(y)));
 				x = "";
 				y = "";
 			}else if(type == 2){
-				G.push_back(new geurchar(stoi(x),stoi(y)));
+				G.at(nivC-1).push_back(new geurchar(stoi(x),stoi(y)));
 				x = "";
 				y = "";
 			}else if(type == 3){
-				R.push_back(new reumu(stoi(x),stoi(y)));
+				R.at(nivC-1).push_back(new reumu(stoi(x),stoi(y)));
 				x = "";
 				y = "";
 			}else if(type == 4){
-				P.push_back(new teupor(stoi(x),stoi(y)));
+				P.at(nivC-1).push_back(new teupor(stoi(x),stoi(y)));
 				x = "";
 				y = "";
+			}else if(type == 5){
+				S.at(nivC-1).push_back(new streumon(stoi(x),stoi(y)));
+				x = "";
+				y = "";
+			}else if(type ==6){
+				longueur.push_back(stoi(x));
+				largeur.push_back(stoi(y));
+				x="";
+				y="";
 			}else{
-				longueur = stoi(x);
-				largeur = stoi(y);
+				int nivTotal = stoi(x);
+				J.setNivTotal(nivTotal);
+				init_vector(R,nivTotal);
+				init_vector(D,nivTotal);
+				init_vector(G,nivTotal);
+				init_vector(P,nivTotal);
+				init_vector(S,nivTotal);
 				x="";
 				y="";
 			}
@@ -82,12 +108,13 @@ void iterVector(vector<vector<char>> &T,vector<element*> & V){
 	}
 }
 
-void update(vector<vector<char>> &T, vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P, oueurj &J){
+void update(vector<vector<char>> &T, vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P, vector<element*> &S,oueurj &J){
 	T[J.getY()][J.getX()] = J.graphic();
 	iterVector(T,R);
 	iterVector(T,D);
 	iterVector(T,G);
 	iterVector(T,P);
+	iterVector(T,S);
 }
 
 void clear(vector<vector<char>> &T){
@@ -105,47 +132,52 @@ void draw(vector<vector<char>> & T,oueurj &J){
 			mvprintw(i,j,"%c",T[i][j]);
 		}
 	}
-
-	mvprintw(0,largeur+5,"Diams : %d",J.getNbDiams());
-	mvprintw(1,largeur+5,"Téléportations : %d",J.getNbTeles());
+	int nivC = J.getNivCourant() - 1;
+	mvprintw(0,largeur.at(nivC)+10,"Diams : %d",J.getNbDiams());
+	mvprintw(1,largeur.at(nivC)+10,"Téléportations : %d",J.getNbTeles());
+	mvprintw(2,largeur.at(nivC)+10,"Niveau : %d/%d",nivC+1,J.getNivTotal());
+	mvprintw(3,largeur.at(nivC)+10,"Vie : %d",J.getNbVies());
+	
 }
 
-
-void clear(vector<vector<char>> &T, vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P, oueurj &J){
-	T.clear();
-	R.clear();
-	D.clear();
-	G.clear();
-	P.clear();
+void reset_pos(oueurj &J){
+	J.setX(5);
+	J.setY(5);
+	J.reset();
 }
+
 int main(){
 	char c;
 	vector<vector<char>> T;
-	vector<element*> R;
-	vector<element*> D;
-	vector<element*> G;
-	vector<element*> P;
-	do{
-		oueurj J(5,5);
-		if(importFichier(R,D,G,P)){
-			init_plateau(T,longueur,largeur);
-			initscr();
-			cbreak();
-			noecho();
-			update(T,R,D,G,P,J);
-			draw(T,J);
-			while(!J.estGagner()){
-				c = getch();
-				if(J.keyboard_control(c,T,R,D,G,P)){
-					clear(T);
-					update(T,R,D,G,P,J);
-					draw(T,J);
+	vector<vector<element*>> R;
+	vector<vector<element*>> D;
+	vector<vector<element*>> G;
+	vector<vector<element*>> P;
+	vector<vector<element*>> S;
+	oueurj J(5,5);
+	int nivC;
+	if(importFichier(R,D,G,P,S,J)){
+		while(!(J.estGagne() || J.estPerdu())){
+				nivC = J.getNivCourant() - 1;
+				init_plateau(T,longueur.at(nivC),largeur.at(nivC));
+				initscr();
+				cbreak();
+				noecho();
+				update(T,R.at(nivC),D.at(nivC),G.at(nivC),P.at(nivC),S.at(nivC),J);
+				draw(T,J);
+				while(!J.estFini() && !J.estPerdu()){
+					c = getch();
+					if(J.keyboard_control(c,T,R.at(nivC),D.at(nivC),G.at(nivC),P.at(nivC),S.at(nivC))){
+						clear(T);
+						update(T,R.at(nivC),D.at(nivC),G.at(nivC),P.at(nivC),S.at(nivC),J);
+						draw(T,J);
+					}
 				}
-			}
-			clear();
-			endwin();
-			clear(T,R,D,G,P,J);
-		}		
-	}while(1);
+				clear();
+				endwin();
+				reset_pos(J);
+				T.clear();
+		}	
+	}		
 	return 0;
 }

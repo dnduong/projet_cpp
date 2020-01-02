@@ -1,11 +1,11 @@
 CPP=g++ --std=c++11 -Wall
 all : creator main
-creator : creator.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o
-	$(CPP) -o creator creator.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o
+creator : creator.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o streumon.o
+	$(CPP) -o creator creator.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o streumon.o
 creator.o : creator.cpp
 	$(CPP) -c creator.cpp
-main : main.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o oueurj.o
-	$(CPP) -o main main.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o oueurj.o -lncurses
+main : main.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o oueurj.o streumon.o
+	$(CPP) -o main main.o element.o diams.o teupor.o reumu.o geurchar.o mobile.o oueurj.o streumon.o -lncurses
 main.o : main.cpp
 	$(CPP) -c main.cpp
 element.o : element.cpp
@@ -22,6 +22,8 @@ mobile.o : mobile.cpp
 	$(CPP) -c mobile.cpp
 oueurj.o : oueurj.cpp
 	$(CPP) -c oueurj.cpp
+streumon.o : streumon.cpp
+	$(CPP) -c streumon.cpp
 
 clean :
 	rm *.o

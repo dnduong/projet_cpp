@@ -21,3 +21,11 @@ int element::getX(){
 int element::getY(){
 	return this->y;
 }
+
+void element::setX(int nx){
+	this->x = nx;
+}
+
+void element::setY(int ny){
+	this->y = ny;
+}

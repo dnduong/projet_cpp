@@ -5,6 +5,7 @@
 #include "geurchar.hpp"
 #include "mobile.hpp"
 #include "commun.hpp"
+#include "streumon.hpp"
 #include <vector>
 #include <string>
 #include <fstream>
@@ -15,6 +16,9 @@ using namespace std;
 
 int longueur;
 int largeur;
+int nivTotal;
+string fn;
+
 
 bool my_isdigit(string & c){
 	for(unsigned int i = 0; i < c.size(); i++){
@@ -40,6 +44,8 @@ void init(vector<vector<char>> & T, char ch){
 		case '-' : 
 			d = "teupor";
 			break;
+		case '#':
+			d = "streumon";
 		default :
 			break;
 	}
@@ -79,12 +85,9 @@ void codage(vector<element*> &V, fstream & file){
 	}
 }
 
-void creationFichier(vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P){
-	string fn;
-	cout<<"Entrer le nom du fichier"<<endl;
-	cin>>fn;
+void creationFichier(vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P,vector<element*> & S){
 	fstream file;
-	file.open(fn,ios::out);
+	file.open(fn,fstream::app);
 	if(!file){
 		cout<<"Création échouée"<<endl;
 		return;
@@ -103,10 +106,12 @@ void creationFichier(vector<element*> & R, vector<element*> & D, vector<element*
 	codage(G,file);
 	file<<'T';
 	codage(P,file);
+	file<<'M';
+	codage(S,file);
 	file.close();
 }
 
-void tableToVector(vector<vector<char>> &T, vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P){
+void tableToVector(vector<vector<char>> &T, vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P,vector<element*> & S){
 	for(unsigned int i = 0; i< T.size(); i++){
 		for(unsigned int j = 0; j< T.at(i).size(); j++){
 			if(T[i][j] == 'X'){
@@ -117,6 +122,8 @@ void tableToVector(vector<vector<char>> &T, vector<element*> & R, vector<element
 				G.push_back(new geurchar(j,i));
 			}else if(T[i][j] == '-'){
 				P.push_back(new teupor(j,i));
+			}else if(T[i][j] == '#'){
+				S.push_back(new streumon(j,i));
 			}
 		}
 	}
@@ -131,7 +138,7 @@ void init_reumu(vector<vector<char>> & T){
 		T[longueur-1][i]='X';
 		T[0][i]='X';
 	}
-	//draw(T);
+	draw(T);
 }
 
 int enter_digit(string & c){
@@ -140,6 +147,27 @@ int enter_digit(string & c){
 		cin>>c;
 	}
 	return stoi(c);
+}
+void init(){
+	cout<<"Entrer le nom du fichier"<<endl;
+	cin>>fn;
+	string c;
+	cout<<"Entrer le nombre total de niveaux"<<endl;
+	cout<<"Nb_niveau : ";
+	nivTotal = enter_digit(c);
+	cout<<nivTotal<<endl;
+	fstream file;
+	file.open(fn,fstream::out);
+	if(!file){
+		cout<<"Création échouée"<<endl;
+		return;
+	}
+	file<<'L';
+	file<<'x';
+	file<<nivTotal;
+	file<<'y';
+	file<<nivTotal;
+	file<<',';
 }
 
 void init_plateau_creator(vector<vector<char>> & T){
@@ -170,6 +198,8 @@ void init_random(vector<vector<char>> &T, char ch){
 		case '-' : 
 			d = "teupor";
 			break;
+		case '#' :
+			d = "streumon";
 		default :
 			break;
 	}
@@ -194,20 +224,30 @@ void init_random(vector<vector<char>> &T, char ch){
 
 }
 
+void random_create(vector<vector<char>> &T, vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P,vector<element*> & S){
+	init();
+	for (int i = 1; i <= nivTotal; i++){
+		init_plateau_creator(T);
+		init_reumu(T);
+		init_random(T,'-');
+		init_random(T,'$');
+		init_random(T,'X');
+		init_random(T,'*');
+		init_random(T,'#');
+		draw(T);
+		tableToVector(T,R,D,G,P,S);
+		creationFichier(R,D,G,P,S);
+		clear(T,R,D,G,P,S);
+	}
+}
+
 int main(){
 	vector<vector<char>> T;
 	vector<element*> R;
 	vector<element*> D;
 	vector<element*> G;
 	vector<element*> P;
-	init_plateau_creator(T);
-	init_reumu(T);
-	init_random(T,'-');
-	init_random(T,'$');
-	init_random(T,'X');
-	init_random(T,'*');
-	draw(T);
-	tableToVector(T,R,D,G,P);
-	creationFichier(R,D,G,P);
+	vector<element*> S;
+	random_create(T,R,D,G,P,S);
 	return 0;
 }	

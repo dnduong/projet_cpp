@@ -8,16 +8,24 @@
 
 class oueurj: public mobile{
 private:
-	int nbDiams, nbTeles;
-	bool gagne;
+	int nbDiams, nbTeles, nbVies, nivTotal, nivCourant;
+	bool fini,gagne;
 public:
-  	virtual bool move(vector<vector<char>> &,vector<element *> &, vector<element *> &, vector<element *> &, vector<element *> &,int,int);
-	bool keyboard_control(char & ,vector<vector<char>> &,vector<element *> &, vector<element *> &, vector<element *> &, vector<element *> &);
+  	bool move(vector<vector<char>> &,vector<element *> &, vector<element *> &, vector<element *> &, vector<element *> &,vector<element *> &,int,int);
+	bool keyboard_control(char & ,vector<vector<char>> &,vector<element *> &, vector<element *> &, vector<element *> &, vector<element *> &,vector<element *> &);
 	int getNbDiams();
 	int getNbTeles();
+	int getNbVies();
+	int getNivTotal();
+	void reset();
+	int getNivCourant();
+	void setNivTotal(int);
 	oueurj(int,int);
-	bool estGagner();
-	bool teleport(vector<vector<char>> &,vector<element *> &, vector<element *> &, vector<element *> &, vector<element *> &);
+	bool estFini();
+	bool estGagne();
+	bool estPerdu();
+	void random_case(vector<vector<char>> &,int *,int *);
+	bool teleport(vector<vector<char>> &,vector<element *> &, vector<element *> &, vector<element *> &, vector<element *> &,vector<element *> &);
 	virtual char graphic();
 	virtual ~oueurj();
 };

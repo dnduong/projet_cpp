@@ -2,6 +2,6 @@
 
 streumon::streumon(int x, int y):mobile(x,y){}
 char streumon::graphic(){
-	return 'S';
+	return '#';
 }
 streumon::~streumon(){}

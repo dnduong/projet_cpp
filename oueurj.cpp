@@ -1,15 +1,26 @@
 #include "oueurj.hpp"
 using namespace std;
 
-oueurj::oueurj(int x, int y):mobile(x,y),nbDiams(0),nbTeles(0),gagne(false){}
+oueurj::oueurj(int x, int y):mobile(x,y),nbDiams(0),nbTeles(0),nbVies(3),nivTotal(0),nivCourant(1),fini(false),gagne(false){}
 
 oueurj::~oueurj(){}
 
-bool oueurj::estGagner(){
+void oueurj::setNivTotal(int n){
+  this->nivTotal=n;
+}
+
+bool oueurj::estPerdu(){
+  return this->nbVies == 0;
+}
+bool oueurj::estFini(){
+  return this->fini;
+}
+
+bool oueurj::estGagne(){
   return this->gagne;
 }
 
-bool oueurj::move(vector<vector<char>> &T,vector<element *> & R, vector<element *> & D, vector<element *> & G, vector<element *> & P,int a,int b){
+bool oueurj::move(vector<vector<char>> &T,vector<element *> & R, vector<element *> & D, vector<element *> & G, vector<element *> & P,vector<element*> & S,int a,int b){
   if(T[b][a]=='\0'){
     this->move_without_condition(a,b);
     return true;
@@ -36,74 +47,83 @@ bool oueurj::move(vector<vector<char>> &T,vector<element *> & R, vector<element 
   }
 
   if (T[b][a]=='+'){
-    this->gagne = true;
+    if(nivCourant<nivTotal){
+      this->nivCourant++; 
+    }else{
+      this->gagne = true;
+    }
+    this->fini = true; 
     return true;
   }
   
+  if (T[b][a]=='#'){
+    this->nbVies--;
+    return true;
+  }
+
   return false;
-  /*
-
-  if (T[b][a]=='S'){
-    //this->nbVies--;
-    this->move_without_condition(T,a,b,'S');
-    cout<<"Oups ! Un streumon a eu votre peau..."<<endl;
-  }
-  if (this->nbVies==0){
-    cout<<"plus de Vies, vous êtes mort(DCD)..."<<endl;
-  }
-
-  */
 }
-bool oueurj::teleport(vector<vector<char>> &T,vector<element *> & R, vector<element *> & D, vector<element *> & G, vector<element *> & P){
-  if(this->nbTeles <= 0){
-    return false;
-  }
+
+void oueurj::random_case(vector<vector<char>> &T, int *xNext, int *yNext){
   unsigned seed = chrono::system_clock::now().time_since_epoch().count();
   default_random_engine generator (seed);
   uniform_int_distribution<int> distribution_y(1,T.size()-2);
   uniform_int_distribution<int> distribution_x(1,T[0].size()-2);
   bool mv = false;
-  int xPrev = this->x;
-  int yPrev = this->y;
-  while (!mv){
-    mv = this->move(T,R,D,G,P,distribution_x(generator),distribution_y(generator)) && (xPrev != this->x) && (yPrev != this->y);
+  int newX, newY;
+  while(!mv){
+    newX = distribution_x(generator);
+    newY = distribution_y(generator);
+    mv = (T[newY][newX] == '\0') && (newX != this->x) && (newY != this->y);
   }
-  this->nbTeles--;
-  return true;
+  *xNext = newX;
+  *yNext = newY;
+}
+
+bool oueurj::teleport(vector<vector<char>> &T,vector<element *> & R, vector<element *> & D, vector<element *> & G, vector<element *> & P,vector<element*> & S){
+  if(this->nbTeles <= 0){
+    return false;
+  }else{
+    int xNext,yNext;
+    random_case(T,&xNext,&yNext);
+    move(T,R,D,G,P,S,xNext,yNext);
+    this->nbTeles--;
+    return true;
+  }
 }
 
 char oueurj::graphic(){
   return '@';
 }
 
-bool oueurj::keyboard_control(char & c,vector<vector<char>> &T,vector<element *> & R, vector<element *> & D, vector<element *> & G, vector<element *> & P){
+bool oueurj::keyboard_control(char & c,vector<vector<char>> &T,vector<element *> & R, vector<element *> & D, vector<element *> & G, vector<element *> & P,vector<element*> & S){
 	switch(c){
 		case 'q' :
-			return this->gauche(T,R,D,G,P);
+			return this->move(T,R,D,G,P,S,x-1,y);
 			break;
 		case 'd' :
-			return this->droite(T,R,D,G,P);
+			return this->move(T,R,D,G,P,S,x+1,y);
 			break;
 		case 'z':
-			return this->haut(T,R,D,G,P);
+			return this->move(T,R,D,G,P,S,x,y-1);
 			break;
 		case 's':
-			return this->bas(T,R,D,G,P);
+			return this->move(T,R,D,G,P,S,x,y+1);
 			break;
 		case 'a':
-			return this->nord_ouest(T,R,D,G,P);
+			return this->move(T,R,D,G,P,S,x-1,y-1);
 			break;
 		case 'e':
-			return this->nord_est(T,R,D,G,P);
+			return this->move(T,R,D,G,P,S,x+1,y-1);
 			break;
 		case 'w':
-			return this->sud_ouest(T,R,D,G,P);
+			return this->move(T,R,D,G,P,S,x-1,y+1);
 			break;
 		case 'c':
-			return this->sud_est(T,R,D,G,P);
+			return this->move(T,R,D,G,P,S,x+1,y+1);
 			break;
     case 'g':
-      return this->teleport(T,R,D,G,P);
+      return this->teleport(T,R,D,G,P,S);
 		default:
       return false;
 			break;
@@ -117,3 +137,21 @@ int oueurj::getNbDiams(){
 int oueurj::getNbTeles(){
   return nbTeles;
 }
+
+int oueurj::getNbVies(){
+  return nbVies;
+}
+
+int oueurj::getNivCourant(){
+  return nivCourant;
+}
+
+int oueurj::getNivTotal(){
+  return nivTotal;
+}
+
+void oueurj::reset(){
+  this->fini = false;
+  this->nbDiams = 0;
+}
+
