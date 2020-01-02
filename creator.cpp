@@ -5,6 +5,7 @@
 #include "geurchar.hpp"
 #include "mobile.hpp"
 #include "commun.hpp"
+#include "oueurj.hpp"
 #include "streumon.hpp"
 #include <vector>
 #include <string>

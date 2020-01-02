@@ -10,7 +10,7 @@ void oueurj::setNivTotal(int n){
 }
 
 bool oueurj::estPerdu(){
-  return this->nbVies == 0;
+  return this->nbVies <= 0;
 }
 bool oueurj::estFini(){
   return this->fini;
@@ -18,6 +18,29 @@ bool oueurj::estFini(){
 
 bool oueurj::estGagne(){
   return this->gagne;
+}
+
+void oueurj::random_case(vector<vector<char>> &T, int *xNext, int *yNext){
+  unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+  default_random_engine generator (seed);
+  uniform_int_distribution<int> distribution_y(1,T.size()-2);
+  uniform_int_distribution<int> distribution_x(1,T[0].size()-2);
+  bool mv = false;
+  int newX, newY;
+  while(!mv){
+    newX = distribution_x(generator);
+    newY = distribution_y(generator);
+    mv = (T[newY][newX] == '\0') && (newX != this->x) && (newY != this->y);
+  }
+  *xNext = newX;
+  *yNext = newY;
+}
+
+bool oueurj::randomMove(vector<vector<char>> &T){
+  int xNext,yNext;
+  random_case(T,&xNext,&yNext);
+  move_without_condition(xNext,yNext);
+  return true;
 }
 
 bool oueurj::move(vector<vector<char>> &T,vector<element *> & R, vector<element *> & D, vector<element *> & G, vector<element *> & P,vector<element*> & S,int a,int b){
@@ -57,38 +80,23 @@ bool oueurj::move(vector<vector<char>> &T,vector<element *> & R, vector<element 
   }
   
   if (T[b][a]=='#'){
-    this->nbVies--;
-    return true;
+    return this->revive(T);
   }
 
   return false;
 }
 
-void oueurj::random_case(vector<vector<char>> &T, int *xNext, int *yNext){
-  unsigned seed = chrono::system_clock::now().time_since_epoch().count();
-  default_random_engine generator (seed);
-  uniform_int_distribution<int> distribution_y(1,T.size()-2);
-  uniform_int_distribution<int> distribution_x(1,T[0].size()-2);
-  bool mv = false;
-  int newX, newY;
-  while(!mv){
-    newX = distribution_x(generator);
-    newY = distribution_y(generator);
-    mv = (T[newY][newX] == '\0') && (newX != this->x) && (newY != this->y);
-  }
-  *xNext = newX;
-  *yNext = newY;
+bool oueurj::revive(vector<vector<char>> &T){
+  this->nbVies--;
+  return this->randomMove(T);
 }
 
-bool oueurj::teleport(vector<vector<char>> &T,vector<element *> & R, vector<element *> & D, vector<element *> & G, vector<element *> & P,vector<element*> & S){
+bool oueurj::teleport(vector<vector<char>> &T){
   if(this->nbTeles <= 0){
     return false;
   }else{
-    int xNext,yNext;
-    random_case(T,&xNext,&yNext);
-    move(T,R,D,G,P,S,xNext,yNext);
     this->nbTeles--;
-    return true;
+    return this->randomMove(T);  
   }
 }
 
@@ -123,11 +131,12 @@ bool oueurj::keyboard_control(char & c,vector<vector<char>> &T,vector<element *>
 			return this->move(T,R,D,G,P,S,x+1,y+1);
 			break;
     case 'g':
-      return this->teleport(T,R,D,G,P,S);
+      return this->teleport(T);
 		default:
       return false;
 			break;
 	}
+  return true;
 }
 
 int oueurj::getNbDiams(){
@@ -150,8 +159,9 @@ int oueurj::getNivTotal(){
   return nivTotal;
 }
 
-void oueurj::reset(){
+void oueurj::reset(vector<vector<char>> &T){
   this->fini = false;
   this->nbDiams = 0;
+  this->randomMove(T);
 }
 

@@ -4,10 +4,11 @@
 #include "geurchar.hpp"
 #include "commun.hpp"
 #include "oueurj.hpp"
+#include "streumon.hpp"
 #include <vector>
 #include <string>
 #include <fstream>
-#include "streumon.hpp"
+
 using namespace std;
 
 vector<int> longueur;
@@ -117,6 +118,12 @@ void update(vector<vector<char>> &T, vector<element*> & R, vector<element*> & D,
 	iterVector(T,S);
 }
 
+void moveS(vector<vector<char>> &T,vector<element*> & S,oueurj &J){
+	for (auto s : S){
+		dynamic_cast<streumon *>(s)->randomMove(T,J);
+	}
+}
+
 void clear(vector<vector<char>> &T){
 	clear();
 	for(unsigned int i = 0; i< T.size(); i++){
@@ -134,16 +141,10 @@ void draw(vector<vector<char>> & T,oueurj &J){
 	}
 	int nivC = J.getNivCourant() - 1;
 	mvprintw(0,largeur.at(nivC)+10,"Diams : %d",J.getNbDiams());
-	mvprintw(1,largeur.at(nivC)+10,"Téléportations : %d",J.getNbTeles());
+	mvprintw(1,largeur.at(nivC)+10,"Téléports : %d",J.getNbTeles());
 	mvprintw(2,largeur.at(nivC)+10,"Niveau : %d/%d",nivC+1,J.getNivTotal());
 	mvprintw(3,largeur.at(nivC)+10,"Vie : %d",J.getNbVies());
 	
-}
-
-void reset_pos(oueurj &J){
-	J.setX(5);
-	J.setY(5);
-	J.reset();
 }
 
 int main(){
@@ -154,12 +155,15 @@ int main(){
 	vector<vector<element*>> G;
 	vector<vector<element*>> P;
 	vector<vector<element*>> S;
-	oueurj J(5,5);
+	oueurj J(0,0);
 	int nivC;
 	if(importFichier(R,D,G,P,S,J)){
 		while(!(J.estGagne() || J.estPerdu())){
 				nivC = J.getNivCourant() - 1;
 				init_plateau(T,longueur.at(nivC),largeur.at(nivC));
+				update(T,R.at(nivC),D.at(nivC),G.at(nivC),P.at(nivC),S.at(nivC),J);
+				J.reset(T);
+				clear(T);
 				initscr();
 				cbreak();
 				noecho();
@@ -170,12 +174,14 @@ int main(){
 					if(J.keyboard_control(c,T,R.at(nivC),D.at(nivC),G.at(nivC),P.at(nivC),S.at(nivC))){
 						clear(T);
 						update(T,R.at(nivC),D.at(nivC),G.at(nivC),P.at(nivC),S.at(nivC),J);
+						moveS(T,S.at(nivC),J);
+						clear(T);
+						update(T,R.at(nivC),D.at(nivC),G.at(nivC),P.at(nivC),S.at(nivC),J);
 						draw(T,J);
 					}
 				}
 				clear();
 				endwin();
-				reset_pos(J);
 				T.clear();
 		}	
 	}		
