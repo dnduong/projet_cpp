@@ -20,22 +20,6 @@ bool oueurj::estGagne(){
   return this->gagne;
 }
 
-void oueurj::random_case(vector<vector<char>> &T, int *xNext, int *yNext){
-  unsigned seed = chrono::system_clock::now().time_since_epoch().count();
-  default_random_engine generator (seed);
-  uniform_int_distribution<int> distribution_y(1,T.size()-2);
-  uniform_int_distribution<int> distribution_x(1,T[0].size()-2);
-  bool mv = false;
-  int newX, newY;
-  while(!mv){
-    newX = distribution_x(generator);
-    newY = distribution_y(generator);
-    mv = (T[newY][newX] == '\0') && (newX != this->x) && (newY != this->y);
-  }
-  *xNext = newX;
-  *yNext = newY;
-}
-
 bool oueurj::randomMove(vector<vector<char>> &T){
   int xNext,yNext;
   random_case(T,&xNext,&yNext);
@@ -44,7 +28,7 @@ bool oueurj::randomMove(vector<vector<char>> &T){
 }
 
 bool oueurj::move(vector<vector<char>> &T,vector<element *> & R, vector<element *> & D, vector<element *> & G, vector<element *> & P,vector<element*> & S,int a,int b){
-  if(T[b][a]=='\0'){
+  if(T[b][a]==32){
     this->move_without_condition(a,b);
     return true;
 	}
@@ -87,7 +71,7 @@ bool oueurj::move(vector<vector<char>> &T,vector<element *> & R, vector<element 
 }
 
 bool oueurj::revive(vector<vector<char>> &T){
-  this->nbVies--;
+  //this->nbVies--;
   return this->randomMove(T);
 }
 

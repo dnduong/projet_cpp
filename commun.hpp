@@ -10,7 +10,7 @@ void init_plateau(vector<vector<char>> &T, int LONGUEUR, int LARGEUR){
 	}
 	for(unsigned int i = 0; i< T.size(); i++){
 		for (int j = 0; j< LARGEUR; j++){
-			T[i].push_back('\0');
+			T[i].push_back(32);
 		}
 	}
 } 
@@ -22,6 +22,18 @@ void draw(vector<vector<char>> & T){
 		}
 		cout<<'\n';
 	}
+}
+
+int empty_case(vector<vector<char>> & T){
+	int ct = 0;
+	for(unsigned int i = 0; i< T.size(); i++){
+		for (unsigned int j = 0; j< T[i].size(); j++){
+			if(T[i][j] == 32){
+				ct++;
+			}
+		}
+	}
+	return ct;
 }
 
 void clear(vector<vector<char>> &T, vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P,vector<element*> & S){

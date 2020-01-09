@@ -2,8 +2,7 @@
 #define OUEURJ
 #include "mobile.hpp"
 #include "teupor.hpp"
-#include <chrono>
-#include <random>
+
 
 
 class oueurj: public mobile{
@@ -26,7 +25,6 @@ public:
 	bool estFini();
 	bool estGagne();
 	bool estPerdu();
-	void random_case(vector<vector<char>> &,int *,int *);
 	bool teleport(vector<vector<char>> &);
 	virtual char graphic();
 	virtual ~oueurj();

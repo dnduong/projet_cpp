@@ -7,9 +7,10 @@
 
 class streumon: public mobile{
 public:
-	bool move(vector<vector<char>> &,oueurj &,int,int);
-	void randomMove(vector<vector<char>> &,oueurj &);
+	bool move(vector<vector<char>> &,vector<element *>&,oueurj &,int,int);
+	void randomMove(vector<vector<char>> &,vector<element *> &,oueurj &);
 	streumon(int,int);
+	static int empty_case(vector<vector<char>> &);
 	virtual char graphic();
 	virtual ~streumon();
 };

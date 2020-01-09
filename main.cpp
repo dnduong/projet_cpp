@@ -109,7 +109,17 @@ void iterVector(vector<vector<char>> &T,vector<element*> & V){
 	}
 }
 
+void clear(vector<vector<char>> &T){
+	clear();
+	for(unsigned int i = 0; i< T.size(); i++){
+		for (unsigned int j = 0; j< T[i].size(); j++){
+			T[i][j]=32;
+		}
+	}
+}
+
 void update(vector<vector<char>> &T, vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P, vector<element*> &S,oueurj &J){
+	clear(T);
 	T[J.getY()][J.getX()] = J.graphic();
 	iterVector(T,R);
 	iterVector(T,D);
@@ -118,22 +128,15 @@ void update(vector<vector<char>> &T, vector<element*> & R, vector<element*> & D,
 	iterVector(T,S);
 }
 
-void moveS(vector<vector<char>> &T,vector<element*> & S,oueurj &J){
+
+void moveS(vector<vector<char>> &T, vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P, vector<element*> &S,oueurj &J){
 	for (auto s : S){
-		dynamic_cast<streumon *>(s)->randomMove(T,J);
+		dynamic_cast<streumon *>(s)->randomMove(T,S,J);
+		update(T,R,D,G,P,S,J);
 	}
 }
 
-void clear(vector<vector<char>> &T){
-	clear();
-	for(unsigned int i = 0; i< T.size(); i++){
-		for (unsigned int j = 0; j< T[i].size(); j++){
-			T[i][j]='\0';
-		}
-	}
-}
-
-void draw(vector<vector<char>> & T,oueurj &J){
+void draw(vector<vector<char>> & T,oueurj &J,vector<element*> & S){
 	for(unsigned int i = 0; i< T.size(); i++){
 		for (unsigned int j = 0; j< T[i].size(); j++){
 			mvprintw(i,j,"%c",T[i][j]);
@@ -144,6 +147,7 @@ void draw(vector<vector<char>> & T,oueurj &J){
 	mvprintw(1,largeur.at(nivC)+10,"Téléports : %d",J.getNbTeles());
 	mvprintw(2,largeur.at(nivC)+10,"Niveau : %d/%d",nivC+1,J.getNivTotal());
 	mvprintw(3,largeur.at(nivC)+10,"Vie : %d",J.getNbVies());
+	mvprintw(4,largeur.at(nivC)+10,"Streumons : %d",S.size());
 	
 }
 
@@ -163,21 +167,17 @@ int main(){
 				init_plateau(T,longueur.at(nivC),largeur.at(nivC));
 				update(T,R.at(nivC),D.at(nivC),G.at(nivC),P.at(nivC),S.at(nivC),J);
 				J.reset(T);
-				clear(T);
 				initscr();
 				cbreak();
 				noecho();
 				update(T,R.at(nivC),D.at(nivC),G.at(nivC),P.at(nivC),S.at(nivC),J);
-				draw(T,J);
+				draw(T,J,S.at(nivC));
 				while(!J.estFini() && !J.estPerdu()){
 					c = getch();
 					if(J.keyboard_control(c,T,R.at(nivC),D.at(nivC),G.at(nivC),P.at(nivC),S.at(nivC))){
-						clear(T);
 						update(T,R.at(nivC),D.at(nivC),G.at(nivC),P.at(nivC),S.at(nivC),J);
-						moveS(T,S.at(nivC),J);
-						clear(T);
-						update(T,R.at(nivC),D.at(nivC),G.at(nivC),P.at(nivC),S.at(nivC),J);
-						draw(T,J);
+						moveS(T,R.at(nivC),D.at(nivC),G.at(nivC),P.at(nivC),S.at(nivC),J);
+						draw(T,J,S.at(nivC));
 					}
 				}
 				clear();

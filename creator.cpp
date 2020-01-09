@@ -64,7 +64,7 @@ void init(vector<vector<char>> & T, char ch){
 					if(T[b][a] == 'X' && ch == '-'){
 					T[b][a]= ch;
 					}
-					if(T[b][a] == '\0' && ch != '-'){
+					if(T[b][a] == 32 && ch != '-'){
 						T[b][a]= ch;
 					}
 					draw(T);
@@ -216,7 +216,7 @@ void init_random(vector<vector<char>> &T, char ch){
 		y = distribution_y(generator);
 		if(T[y][x] == 'X' && ch == '-'){
 			T[y][x]= ch;
-		}else if(T[y][x] == '\0' && ch != '-'){
+		}else if(T[y][x] == 32 && ch != '-'){
 			T[y][x]= ch;
 		}else{
 			i--;
