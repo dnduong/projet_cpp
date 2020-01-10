@@ -88,7 +88,7 @@ char oueurj::graphic(){
 }
 
 bool oueurj::keyboard_control(char & c,vector<vector<char>> &T,vector<element *> & R, vector<element *> & D, vector<element *> & G, vector<element *> & P,vector<element*> & S){
-	/*switch(c){
+	switch(c){
 		case 'q' :
 			return this->move(T,R,D,G,P,S,x-1,y);
 			break;
@@ -118,8 +118,8 @@ bool oueurj::keyboard_control(char & c,vector<vector<char>> &T,vector<element *>
 		default:
       return false;
 			break;
-	}*/
-  return true;
+	}
+  //return true;
 }
 
 int oueurj::getNbDiams(){
