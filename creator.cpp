@@ -29,52 +29,6 @@ bool my_isdigit(string & c){
 	return true;
 }
 
-void init(vector<vector<char>> & T, char ch){
-	string d;
-	string c;
-	switch(ch){
-		case '$' : 
-			d = "diams";
-			break;
-		case 'X' :
-			d = "murs";
-			break;
-		case '*' :
-			d = "geurchar";
-			break;
-		case '-' : 
-			d = "teupor";
-			break;
-		case '#':
-			d = "streumon";
-		default :
-			break;
-	}
-	while (c != "done"){
-		cout<<"Ajouter des " +d+"!! (Si fini, taper done)"<<endl;
-		cout<<"X = ";
-		cin>>c;
-		if(my_isdigit(c)){
-			int a = stoi(c);
-			cout<<"Y = ";
-			cin>>c;
-			if(my_isdigit(c)){
-				int b = stoi(c);
-				if(0<=a && 0<=b && a<largeur && b <longueur){
-					if(T[b][a] == 'X' && ch == '-'){
-					T[b][a]= ch;
-					}
-					if(T[b][a] == 32 && ch != '-'){
-						T[b][a]= ch;
-					}
-					draw(T);
-				}else{
-					cout<<"Cordonnées invalide"<<endl;
-				}
-			}
-		}	
-	}
-}
 
 void codage(vector<element*> &V, fstream & file){
 	for (auto v: V){

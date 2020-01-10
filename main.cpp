@@ -131,7 +131,7 @@ void update(vector<vector<char>> &T, vector<element*> & R, vector<element*> & D,
 
 void moveS(vector<vector<char>> &T, vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P, vector<element*> &S,oueurj &J){
 	for (auto s : S){
-		dynamic_cast<streumon *>(s)->randomMove(T,S,J);
+		dynamic_cast<streumon *>(s)->randomMove(T,R,D,G,S,J);
 		update(T,R,D,G,P,S,J);
 	}
 }
@@ -183,7 +183,9 @@ int main(){
 				clear();
 				endwin();
 				T.clear();
-		}	
+		}
+		if(J.estGagne()) cout<< "Vous avez gagné ! Yay !" << endl;
+		if(J.estPerdu()) cout<< "Vous avez été géman par un streumon ... 3 fois ...!" <<endl;	
 	}		
 	return 0;
 }
