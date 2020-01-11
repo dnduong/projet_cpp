@@ -70,7 +70,7 @@ bool oueurj::move(vector<vector<char>> &T,vector<element *> & R, vector<element 
 }
 
 bool oueurj::revive(vector<vector<char>> &T){
-  //this->nbVies--;
+  this->nbVies--;
   return this->randomMove(T);
 }
 

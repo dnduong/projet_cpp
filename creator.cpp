@@ -128,11 +128,15 @@ void init(){
 void init_plateau_creator(vector<vector<char>> & T){
 	string c;
 	cout<<"Entrer la taille du tableau"<<endl;
-	cout<<"Longueur : ";
-	longueur = enter_digit(c);
+	do{
+		cout<<"Longueur : ";
+		longueur = enter_digit(c);
+	}while(longueur <= 5);
 	cout<<longueur<<endl;
-	cout<<"Largeur : ";
-	largeur = enter_digit(c);
+	do{
+		cout<<"Largeur : ";
+		largeur = enter_digit(c);
+	}while(largeur <= 10);
 	cout<<largeur<<endl;
 	init_plateau(T,longueur,largeur);
 }
@@ -148,18 +152,21 @@ void init_random(vector<vector<char>> &T, char ch){
 			d = "murs";
 			break;
 		case '*' :
-			d = "geurchar";
+			d = "geurchars";
 			break;
 		case '-' : 
-			d = "teupor";
+			d = "teupors";
 			break;
 		case '#' :
-			d = "streumon";
+			d = "streumons";
 		default :
 			break;
 	}
-	cout<<"Entrer le nombre de " + d + " :"<<endl;
-	int nb = enter_digit(c);
+	int nb;
+	do{
+		cout<<"Entrer le nombre de " + d + " :"<<endl;
+		nb = enter_digit(c);
+	}while(nb<1 || nb >= empty_case(T)-6);
 	unsigned seed = chrono::system_clock::now().time_since_epoch().count();
 	default_random_engine generator (seed);
 	uniform_int_distribution<int> distribution_y(0,longueur-1);
