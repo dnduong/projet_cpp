@@ -130,8 +130,12 @@ void update(vector<vector<char>> &T, vector<element*> & R, vector<element*> & D,
 
 
 void moveS(vector<vector<char>> &T, vector<element*> & R, vector<element*> & D, vector<element*> & G, vector<element*> & P, vector<element*> &S,oueurj &J){
+	streumon *ps;
 	for (auto s : S){
-		dynamic_cast<streumon *>(s)->randomMove(T,R,D,G,S,J);
+		ps = dynamic_cast<streumon *>(s);
+		if(ps != NULL){
+			ps->randomMove(T,R,D,G,S,J);	
+		}
 		update(T,R,D,G,P,S,J);
 	}
 }

@@ -38,7 +38,10 @@ bool oueurj::move(vector<vector<char>> &T,vector<element *> & R, vector<element 
     //ouvrir la porte
     unsigned int p = this->nbDiams;
     if(p<P.size()){
-      dynamic_cast<teupor *>(P[p])->ouvrir();
+      teupor *pt = dynamic_cast<teupor *>(P[p]);
+      if(pt != NULL){
+        pt->ouvrir();
+      }
     }
     this->nbDiams++;
     this->move_without_condition(a,b);
