@@ -131,12 +131,12 @@ void init_plateau_creator(vector<vector<char>> & T){
 	do{
 		cout<<"Longueur : ";
 		longueur = enter_digit(c);
-	}while(longueur <= 5);
+	}while(longueur < 5);
 	cout<<longueur<<endl;
 	do{
 		cout<<"Largeur : ";
 		largeur = enter_digit(c);
-	}while(largeur <= 10);
+	}while(largeur < 10);
 	cout<<largeur<<endl;
 	init_plateau(T,longueur,largeur);
 }
