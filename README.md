@@ -3,6 +3,7 @@ DUONG Duc Nguyen 21604573 & DARDOURI Inès 21504397
 Conception et implémentation d'un petit jeu utilisant le langage C++.
 
 Game creator:
+
 Les fichiers permettant de créer des plateaux de jeu sont les suivants:
 - creator.cpp
 - element.hpp
@@ -14,12 +15,14 @@ Les fichiers permettant de créer des plateaux de jeu sont les suivants:
 - commun.hpp
 - oueurj.hpp
 - streumon.hpp
+
 L’utilisateur choisit d’abord le nombre de niveaux qu’il veut puis la taille du plateau de jeu
 (largeur au moins 10, longueur au moins 5), le nombre de teupors, de diams, de reumus et
 de geurchars (au moins 1 par type d’élément et doit laisser au moins 6 cases libres dans le
 plateau). Il choisit également le nombre de streumons.
 Une fois le jeu créé, le fichier contenant toutes les informations nécessaires au jeu est
 disponible et prêt à être lu pour pouvoir lancer une partie.
+
 Game player:
 Les fichiers permettant de jouer sur les plateaux créés par le Game creator sont les
 suivants:
@@ -31,6 +34,7 @@ suivants:
 - oueurj.hpp
 - streumon.hpp
 - main.cpp
+
 On lance le jeu avec le premier plateau disponible dans le fichier créé par le game creator.
 Le joueur commence la partie avec 3 vies et se situe aléatoirement dans le plateau, et il en
 perd une à chaque fois qu’il se fait capturer par un streumon.
@@ -44,6 +48,7 @@ fois, en utilisant les touches du clavier comme suit :
 - d : pour aller à la case à droite
 - w : pour aller à la case en bas à gauche
 - c : pour aller à la case en bas à droite
+
 Le joueur a également la possibilité de manger des geurchars symbolisés par "*" situés un peu partout sur le
 plateau et les diams symbolisés par "$" pour ovrir les portes symbolisées par "-" si celle-ci est fermée et par "+" si celle-ci est ouverte.
 Capturer un geurchar lui procure une possibilité de téléport aléatoire sur le plateau activable
